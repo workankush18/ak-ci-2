@@ -21,20 +21,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             set -e
-            docker pull ankushmahant18/ak-image:v1
+            cd /home/ubuntu
+            docker compose pull
+            docker compose up -d
 
-            # Purana container stop hoga; brief downtime hogi
-            if docker container inspect d1bbf34bea2f >/dev/null 2>&1; then
-              docker stop d1bbf34bea2f
-            fi
-
-            if docker container inspect ak-app >/dev/null 2>&1; then
-              docker rm -f ak-app
-            fi
-
-            docker run -d \
-              --name ak-app \
-              --restart unless-stopped \
-              -e PORT=3000 \
-              -p 3000:3000 \
-              ankushmahant18/ak-image:v1
